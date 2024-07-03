@@ -35,6 +35,10 @@ init_dnvm_mac() {
 init_dracula() {
   source ~/dracula/zsh/dracula.zsh-theme
   eval "$(dircolors ~/dracula/dircolors/.dircolors)"
+}
+
+init_dracula_zsh() {
+  init_dracula_common
   [[ ! "$(grep -i dracula ~/.gitconfig)" ]] && ((echo ""; cat ~/dracula/git/config/gitconfig) >> ~/.gitconfig)
 }
 
