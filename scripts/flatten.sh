@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+flatten() {
+  cd "$1"
+  find . -mindepth 2 -type f -exec mv {} .. \
+  find . -type d -empty -delete
+}
+
+flatten "$@"
