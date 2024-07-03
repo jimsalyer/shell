@@ -18,7 +18,7 @@ init_aliases() {
 init_brew() {
   export HOMEBREW_BIN="/opt/homebrew/bin"
   export HOMEBREW_OPT="/opt/homebrew/opt"
-  eval "$($HOMEBREW_OPT/brew shellenv)"
+  eval "$($HOMEBREW_BIN/brew shellenv)"
 }
 
 # Dependencies: init_brew
