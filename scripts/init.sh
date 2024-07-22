@@ -38,7 +38,7 @@ init_dracula() {
 }
 
 init_dracula_zsh() {
-  init_dracula_common
+  init_dracula
   [[ ! "$(grep -i dracula ~/.gitconfig)" ]] && ((echo ""; cat ~/dracula/git/config/gitconfig) >> ~/.gitconfig)
 }
 
