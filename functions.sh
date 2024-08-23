@@ -40,6 +40,12 @@ load_sdkman() {
   [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 }
 
+load_zsh() {
+  if [ -t 1 ]; then
+    exec zsh
+  fi
+}
+
 npm_pack_zip() {
   local package_name=$(jq -r '.name' package.json)
   local package_version=$(jq -r '.version' package.json)
