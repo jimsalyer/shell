@@ -40,6 +40,12 @@ ensure_interactive() {
   fi
 }
 
+fix_special_keys() {
+  bindkey "^[[1~" beginning-of-line
+  bindkey "^[[4~" end-of-line
+  bindkey "^[[3~" delete-char
+}
+
 load_basher() {
   export PATH="$HOME/.basher/libexec:$PATH"
   eval "$(basher init - bash)"
