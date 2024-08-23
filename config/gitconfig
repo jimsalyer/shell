@@ -1,0 +1,23 @@
+[alias]
+  br = branch
+  cm = commit -m
+  co = checkout
+  d = diff
+  gl = config -l --global
+  last = log -1 HEAD
+  ll = log --oneline
+  p = push
+  rv = remote -v
+  se = !git rev-list --all | xargs git grep -F
+  st = status -bs
+  unstage = reset HEAD --
+[core]
+  editor = vim
+  autocrlf = false
+[http]
+  sslVerify = false
+[init]
+  defaultBranch = main
+[user]
+  email = jim.salyer@gmail.com
+  name = Jim Salyer
