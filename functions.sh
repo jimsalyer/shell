@@ -17,8 +17,37 @@ change_sam_version() {
   sudo ln -s "/usr/local/aws-sam-cli/$version" /usr/local/aws-sam-cli/current
 }
 
+# Dependencies: load_brew
+config_coreutils_brew() {
+  export PATH="$HOMEBREW_OPT/coreutils/libexec/gnubin:$PATH"
+}
+
 config_devtoolset() {
   export PATH="/opt/rh/devtoolset-8/root/usr/bin:$PATH"
+}
+
+config_mac() {
+  export APP_SUPPORT="/Library/Application Support"
+  export HOME_APP_SUPPORT="$HOME/Library/Application Support"
+}
+
+# Dependencies: config_mac
+config_netskope_mac() {
+  local netskope_cert_bundle="$APP_SUPPORT/Netskope/STAgent/data/netskope-cert-bundle.pem"
+  export AWS_CA_BUNDLE="$netskope_cert_bundle"
+  export CURL_CA_BUNDLE="$netskope_cert_bundle"
+  export NODE_EXTRA_CA_CERTS="$netskope_cert_bundle"
+  export SSL_CERT_FILE="$netskope_cert_bundle"
+  export GIT_SSL_CAPATH="$netskope_cert_bundle"
+  export REQUESTS_CA_BUNDLE="$netskope_cert_bundle"
+}
+
+# Dependencies: load_brew
+config_sqlite_brew() {
+  local sqlite_dir="$HOMEBREW_OPT/sqlite"
+  export PATH="$sqlite_dir/bin:$PATH"
+  export LDFLAGS="-L$sqlite_dir/lib"
+  export CPPFLAGS="-I$sqlite_dir/include"
 }
 
 config_volta() {
@@ -52,6 +81,18 @@ fix_special_keys_windows() {
   bindkey "^[[3~" delete-char
 }
 
+flatten() {
+  cd "$1"
+  find . -mindepth 2 -type f -exec mv {} .. \
+  find . -type d -empty -delete
+}
+
+load_brew() {
+  export HOMEBREW_BIN="/opt/homebrew/bin"
+  export HOMEBREW_OPT="/opt/homebrew/opt"
+  eval "$($HOMEBREW_BIN/brew shellenv)"
+}
+
 load_dircolors() {
   local file="${1:-$HOME/.dircolors}"
   eval "$(dircolors -b $file)"
@@ -63,10 +104,37 @@ load_dnvm() {
   fi
 }
 
+# Dependencies: config_mac
+load_dnvm_mac() {
+  [[ -f "$HOME_APP_SUPPORT/dnvm/env" ]] && source "$HOME_APP_SUPPORT/dnvm/env"
+}
+
+# Dependencies: config_mac
+load_fnm_mac() {
+  export PATH="$HOME/.local/state/fnm_multishells/46415_1719956937051/bin:$PATH"
+  export FNM_DIR="$HOME_APP_SUPPORT/fnm"
+  export FNM_RESOLVE_ENGINES="false"
+  export FNM_COREPACK_ENABLED="false"
+  export FNM_MULTISHELL_PATH="$HOME/.local/state/fnm_multishells/46415_1719956937051"
+  export FNM_LOGLEVEL="info"
+  export FNM_VERSION_FILE_STRATEGY="local"
+  export FNM_NODE_DIST_MIRROR="https://nodejs.org/dist"
+  export FNM_ARCH="arm64"
+  rehash
+}
+
 load_nvm() {
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
   [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
+}
+
+# Dependencies: load_brew
+load_nvm_brew() {
+  export NVM_DIR="$HOME/.nvm"
+  local homebrew_nvm="$HOMEBREW_OPT/nvm"
+  [[ -s "$homebrew_nvm/nvm.sh" ]] && source "$homebrew_nvm/nvm.sh" # This loads nvm
+  [[ -s "$homebrew_nvm/etc/bash_completion.d/nvm" ]] && source "$homebrew_nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
 }
 
 load_nvm_cloud9() {
@@ -94,6 +162,10 @@ load_pyenv() {
   fi
 }
 
+load_rbenv() {
+  eval "$(rbenv init - zsh)"
+}
+
 load_rvm() {
   [[ -s "$HOME/.rvm/environments/default" ]] && source "$HOME/.rvm/environments/default"
   export PATH="$PATH:$HOME/.rvm/bin"
@@ -102,6 +174,11 @@ load_rvm() {
 load_sdkman() {
   export SDKMAN_DIR="$HOME/.sdkman"
   [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+}
+
+# Dependencies: load_brew
+load_sdkman_brew() {
+  [[ -s "$HOMEBREW_OPT/sdkman-cli/libexec/bin/sdkman-init.sh" ]] && source "$HOMEBREW_OPT/sdkman-cli/libexec/bin/sdkman-init.sh"
 }
 
 load_zsh() {
@@ -128,6 +205,46 @@ reload() {
     zsh)  exec zsh ;;
     *)    exit 1 ;;
   esac
+}
+
+repack7() {
+  local orig_nocasematch=$(shopt -p nocasematch; true)
+  shopt -s nocasematch
+
+  for file_path in "$@"; do
+    local file_name=$(basename -- "$file_path")
+    local base_name="${file_name%%.*}"
+    local ext="${file_name##*.}"
+
+    if [[ "$ext" != "7z" ]]; then
+      echo "'$file_name' is not a 7z file. Skipping to next file"
+      continue
+    fi
+
+    local dir_path="${file_path%.*}"
+    local zip_path="$dir_path.zip"
+
+    echo "Repacking '$file_name'"
+    if [[ -f "$zip_path" ]]; then
+      echo "'$file_name' has already been repacked. Skipping to next file"
+      continue
+    fi
+
+    echo "Extracting '$file_name' to temp folder"
+    if [[ ! -d "$dir_path" ]]; then
+      7z e -o"$dir_path" "$file_path"
+    else
+      echo "'$file_name' has already been extracted. Skipping to next step"
+    fi
+
+    echo "Zipping temp folder '$base_name'"
+    zip -jr "$dir_path.zip" "$dir_path"
+
+    echo "Removing temp folder '$base_name'"
+    rm -fr "$dir_path"
+  done
+
+  $orig_nocasematch
 }
 
 sam_build_invoke() {
@@ -175,4 +292,19 @@ sam_start() {
 
 shell() {
   echo "$(readlink /proc/$$/exe | sed "s/.*\///")"
+}
+
+start_timer() {
+  timer=$(($(gdate +%s%0N) / 1000000))
+  echo 'Timer started'
+}
+
+stop_timer() {
+  if [ $timer ]; then
+    now=$(($(gdate +%s%0N) / 1000000))
+    elapsed=$(($now - $timer))
+
+    echo "Timer ran for ${elapsed}ms"
+    unset timer
+  fi
 }
