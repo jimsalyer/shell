@@ -152,6 +152,12 @@ load_nvm_cloud9() {
   unset npm
 }
 
+load_oh_my_posh() {
+  local shell="$1"
+  local theme="$2"
+  eval "$(oh-my-posh --init --shell $shell --config $theme)"
+}
+
 load_pyenv() {
   export PYENV_ROOT="$HOME/.pyenv"
   [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
