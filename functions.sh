@@ -19,7 +19,7 @@ change_sam_version() {
 
 # Dependencies: load_brew
 config_coreutils_brew() {
-  export PATH="$HOMEBREW_OPT/coreutils/libexec/gnubin:$PATH"
+  export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
 }
 
 config_devtoolset() {
@@ -44,7 +44,7 @@ config_netskope_mac() {
 
 # Dependencies: load_brew
 config_sqlite_brew() {
-  local sqlite_dir="$HOMEBREW_OPT/sqlite"
+  local sqlite_dir="$(brew --prefix sqlite)"
   export PATH="$sqlite_dir/bin:$PATH"
   export LDFLAGS="-L$sqlite_dir/lib"
   export CPPFLAGS="-I$sqlite_dir/include"
@@ -88,9 +88,7 @@ flatten() {
 }
 
 load_brew() {
-  export HOMEBREW_BIN="/opt/homebrew/bin"
-  export HOMEBREW_OPT="/opt/homebrew/opt"
-  eval "$($HOMEBREW_BIN/brew shellenv)"
+  eval "$(brew shellenv)"
 }
 
 load_dircolors() {
@@ -132,7 +130,7 @@ load_nvm() {
 # Dependencies: load_brew
 load_nvm_brew() {
   export NVM_DIR="$HOME/.nvm"
-  local homebrew_nvm="$HOMEBREW_OPT/nvm"
+  local homebrew_nvm="$(brew --prefix nvm)"
   [[ -s "$homebrew_nvm/nvm.sh" ]] && source "$homebrew_nvm/nvm.sh" # This loads nvm
   [[ -s "$homebrew_nvm/etc/bash_completion.d/nvm" ]] && source "$homebrew_nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
 }
@@ -184,7 +182,8 @@ load_sdkman() {
 
 # Dependencies: load_brew
 load_sdkman_brew() {
-  [[ -s "$HOMEBREW_OPT/sdkman-cli/libexec/bin/sdkman-init.sh" ]] && source "$HOMEBREW_OPT/sdkman-cli/libexec/bin/sdkman-init.sh"
+  export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
+  [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
 }
 
 load_zsh() {
@@ -206,11 +205,11 @@ npm_pack_zip() {
 }
 
 reload() {
-  case "$(shell)" in
-    bash) exec bash ;;
-    zsh)  exec zsh ;;
-    *)    exit 1 ;;
-  esac
+  if [[ "$SHELL" == *"/bash" ]]; then
+    exec bash
+  elif [[ "$SHELL" == *"/zsh" ]]; then
+    exec zsh
+  fi
 }
 
 repack7() {
@@ -294,10 +293,6 @@ sam_start() {
   else
     sam local start-lambda
   fi
-}
-
-shell() {
-  echo "$(readlink /proc/$$/exe | sed "s/.*\///")"
 }
 
 start_timer() {
