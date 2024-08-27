@@ -6,6 +6,7 @@ aws_invoke() {
   aws lambda invoke --function-name "$function_name" --payload "$payload" --cli-binary-format raw-in-base64-out --endpoint-url http://127.0.0.1:3001 --no-verify-ssl "$outfile"
 }
 
+# Dependencies: config_posh
 change_posh_theme() {
   export POSH_THEME="$POSH_THEMES_PATH/$1.omp.json"
 }
@@ -44,6 +45,10 @@ config_netskope_mac() {
   export SSL_CERT_FILE="$netskope_cert_bundle"
   export GIT_SSL_CAPATH="$netskope_cert_bundle"
   export REQUESTS_CA_BUNDLE="$netskope_cert_bundle"
+}
+
+config_posh() {
+  export POSH_THEMES_PATH="$(brew --prefix oh-my-posh)/themes"
 }
 
 # Dependencies: load_brew
@@ -92,7 +97,17 @@ flatten() {
 }
 
 load_brew() {
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+  local brew_path
+  if [[ -d /opt/homebrew ]]; then
+    brew_path=/opt/homebrew/bin/brew
+  elif [[ -d /usr/local/homebrew ]]; then
+    brew_path=/usr/local/homebrew/bin/brew
+  elif [[ -d "$HOME/.linuxbrew" ]]; then
+    brew_path="$HOME/.linuxbrew/bin/brew"
+  elif [[ -d /home/linuxbrew/.linuxbrew ]]; then
+    brew_path=/home/linuxbrew/.linuxbrew/bin/brew
+  fi
+  [[ "$brew_path" ]] && eval "$($brew_path shellenv)"
 }
 
 load_dircolors() {
@@ -196,6 +211,14 @@ load_zsh() {
   fi
 }
 
+lower() {
+  echo "$1" | tr '[:upper:]' '[:lower:]'
+}
+
+lower_case() {
+  echo "$(lower $1)"
+}
+
 npm_pack_zip() {
   local package_name=$(jq -r '.name' package.json)
   local package_version=$(jq -r '.version' package.json)
@@ -209,9 +232,10 @@ npm_pack_zip() {
 }
 
 reload() {
-  if [[ "$SHELL" == *"/bash" ]]; then
+  local shell="$(shell)"
+  if [[ "$shell" == bash ]]; then
     exec bash
-  elif [[ "$SHELL" == *"/zsh" ]]; then
+  elif [[ "$shell" == zsh ]]; then
     exec zsh
   fi
 }
@@ -299,6 +323,10 @@ sam_start() {
   fi
 }
 
+shell() {
+  echo "$(basename $SHELL)"
+}
+
 start_timer() {
   timer=$(($(gdate +%s%0N) / 1000000))
   echo 'Timer started'
@@ -312,4 +340,12 @@ stop_timer() {
     echo "Timer ran for ${elapsed}ms"
     unset timer
   fi
+}
+
+upper() {
+  echo "$1" | tr '[:lower:]' '[:upper:]'
+}
+
+upper_case() {
+  echo "$(upper $1)"
 }
