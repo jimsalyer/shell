@@ -6,6 +6,10 @@ aws_invoke() {
   aws lambda invoke --function-name "$function_name" --payload "$payload" --cli-binary-format raw-in-base64-out --endpoint-url http://127.0.0.1:3001 --no-verify-ssl "$outfile"
 }
 
+change_posh_theme() {
+  export POSH_THEME="$POSH_THEMES_PATH/$1.omp.json"
+}
+
 change_sam_version() {
   local version="$1"
   if [[ ! -n "$version" ]]; then
@@ -150,9 +154,9 @@ load_nvm_cloud9() {
   unset npm
 }
 
-load_oh_my_posh() {
+load_posh() {
   local shell="$1"
-  local theme="$2"
+  local theme="$POSH_THEMES_PATH/$2.omp.json"
   eval "$(oh-my-posh --init --shell $shell --config $theme)"
 }
 
