@@ -92,7 +92,7 @@ flatten() {
 }
 
 load_brew() {
-  eval "$(brew shellenv)"
+  eval "$(/opt/homebrew/bin/brew shellenv)"
 }
 
 load_dircolors() {
