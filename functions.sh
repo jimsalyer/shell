@@ -48,7 +48,7 @@ config_netskope_mac() {
 }
 
 config_posh() {
-  export POSH_THEMES_PATH="$(brew --prefix oh-my-posh)/themes"
+  [[ -z "$POSH_THEMES_PATH" ]] && export POSH_THEMES_PATH="$(brew --prefix oh-my-posh)/themes"
 }
 
 # Dependencies: load_brew
@@ -170,6 +170,7 @@ load_nvm_cloud9() {
 }
 
 load_posh() {
+  config_posh
   local shell="$1"
   local theme="$POSH_THEMES_PATH/$2.omp.json"
   eval "$(oh-my-posh --init --shell $shell --config $theme)"
