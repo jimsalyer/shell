@@ -126,18 +126,8 @@ load_dnvm_mac() {
   [[ -f "$HOME_APP_SUPPORT/dnvm/env" ]] && source "$HOME_APP_SUPPORT/dnvm/env"
 }
 
-# Dependencies: config_mac
-load_fnm_mac() {
-  export PATH="$HOME/.local/state/fnm_multishells/46415_1719956937051/bin:$PATH"
-  export FNM_DIR="$HOME_APP_SUPPORT/fnm"
-  export FNM_RESOLVE_ENGINES="false"
-  export FNM_COREPACK_ENABLED="false"
-  export FNM_MULTISHELL_PATH="$HOME/.local/state/fnm_multishells/46415_1719956937051"
-  export FNM_LOGLEVEL="info"
-  export FNM_VERSION_FILE_STRATEGY="local"
-  export FNM_NODE_DIST_MIRROR="https://nodejs.org/dist"
-  export FNM_ARCH="arm64"
-  rehash
+load_fnm() {
+  eval "$(fnm env)"
 }
 
 load_nvm() {
