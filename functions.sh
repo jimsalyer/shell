@@ -193,7 +193,7 @@ load_sdkman() {
 # Dependencies: load_brew
 load_sdkman_brew() {
   export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
-  [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
+  [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
 }
 
 load_zsh() {
