@@ -73,9 +73,7 @@ emulate_arm64() {
 }
 
 ensure_interactive() {
-  if [[ -z "$PS1" ]]; then
-    return
-  fi
+  [[ -z "$PS1" ]] && return
 }
 
 fix_special_keys_linux() {
@@ -273,7 +271,7 @@ repack7() {
 
 sam_build_invoke() {
   emulate_arm64
-  sam build
+  sam build --cached
   sam_invoke_shared "$@"
 }
 
