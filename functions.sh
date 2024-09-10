@@ -161,6 +161,10 @@ load_posh() {
   config_posh
   local shell="$1"
   local theme="$POSH_THEMES_PATH/$2.omp.json"
+
+  if [[ "${2,,}" == *.json ]]; then
+    theme="$2"
+  fi
   eval "$(oh-my-posh --init --shell $shell --config $theme)"
 }
 
