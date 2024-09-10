@@ -48,7 +48,7 @@
         {
           "type": "python",
           "style": "plain",
-          "template": "py:({{ if .Venv }}<p:green>venv</>{{ end }})"
+          "template": "{{ if .Venv }}venv:(<p:green>{{ .Venv }}</>){{ end }}"
         }
       ],
       "type": "prompt"
