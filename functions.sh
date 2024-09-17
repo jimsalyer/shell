@@ -165,7 +165,7 @@ load_posh() {
   if [[ "$(lower $2)" == *.json ]]; then
     theme="$2"
   fi
-  eval "$(oh-my-posh --init --shell $shell --config $theme)"
+  eval "$(oh-my-posh init $shell -c $theme)"
 }
 
 load_pyenv() {
