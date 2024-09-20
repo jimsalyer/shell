@@ -321,13 +321,13 @@ shell() {
 }
 
 start_timer() {
-  timer=$(($(gdate +%s%0N) / 1000000))
+  timer=$(($(date +%s%0N) / 1000000))
   echo 'Timer started'
 }
 
 stop_timer() {
-  if [ $timer ]; then
-    now=$(($(gdate +%s%0N) / 1000000))
+  if [[ $timer ]]; then
+    now=$(($(date +%s%0N) / 1000000))
     elapsed=$(($now - $timer))
 
     echo "Timer ran for ${elapsed}ms"
