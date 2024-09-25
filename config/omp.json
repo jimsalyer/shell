@@ -1,5 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "version": 2,
   "palette": {
     "black": "#282a36",
     "red": "#ff5555",
@@ -12,63 +13,63 @@
     "foreground": "#f8f8f2",
     "background": "#282a36"
   },
+  "final_space": true,
   "terminal_background": "p:background",
-  "console_title_template": "{{ .UserName }}@{{ .HostName }}",
+  "console_title_template": "{{ .Folder }}{{ if .Root }} (root){{ end }}",
+  "disable_notice": true,
   "blocks": [
     {
+      "type": "prompt",
       "alignment": "left",
       "newline": true,
       "segments": [
         {
-          "foreground": "p:yellow",
+          "type": "root",
           "style": "plain",
-          "template": "{{ .UserName }} ",
-          "type": "session"
+          "foreground": "p:yellow"
         },
         {
-          "foreground": "p:cyan",
+          "type": "path",
           "style": "plain",
+          "foreground": "p:magenta",
+          "template": "{{ .Path }} ",
           "properties": {
             "style": "folder"
-          },
-          "template": "{{ .Path }} ",
-          "type": "path"
+          }
         },
         {
+          "type": "git",
+          "style": "plain",
+          "foreground": "p:cyan",
+          "template": "({{ .HEAD }} {{ if or (.Working.Changed) (.Staging.Changed) }}<p:yellow>*</>{{ end }}) ",
           "properties": {
             "branch_icon": "",
-            "fetch_status": true,
-            "fetch_stash_count": true,
-            "fetch_worktree_count": true
-          },
-          "style": "plain",
-          "template": "git:({{ if or (.Working.Changed) (.Staging.Changed) }}<p:magenta>{{ .HEAD }}</>{{ else }}<p:green>{{ .HEAD }}</>{{ end }}) ",
-          "type": "git"
+            "fetch_status": true
+          }
         },
         {
           "type": "python",
           "style": "plain",
-          "template": "{{ if .Venv }}venv:(<p:green>{{ .Venv }}</>){{ end }}"
+          "foreground": "p:cyan",
+          "template": "{{ if .Venv }}({{ .Venv }}){{ end }}"
         }
-      ],
-      "type": "prompt"
+      ]
     },
     {
+      "type": "prompt",
       "alignment": "left",
       "newline": true,
       "segments": [
         {
+          "type": "status",
+          "style": "plain",
           "foreground": "p:foreground",
+          "template": "<b>{{ if gt .Code 0 }}<p:red>➜</>{{ else }}<p:green>➜</>{{ end }}</b> ",
           "properties": {
             "always_enabled": true
-          },
-          "style": "plain",
-          "template": "{{ if gt .Code 0 }}<p:red>({{ .Code }}) </>{{ else }}<p:green>({{ .Code }}) </>{{ end }}> ",
-          "type": "status"
+          }
         }
-      ],
-      "type": "prompt"
+      ]
     }
-  ],
-  "version": 2
+  ]
 }
