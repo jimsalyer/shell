@@ -41,10 +41,10 @@
           "type": "git",
           "style": "plain",
           "foreground": "p:cyan",
-          "template": "({{ .HEAD }}{{ if or (.Working.Changed) (.Staging.Changed) }} <p:yellow>*</>{{ end }}) ",
+          "template": "({{ .HEAD }}{{ if .BranchStatus }} {{ .BranchStatus }}{{ end }})",
           "properties": {
-            "branch_icon": "",
-            "fetch_status": true
+            "fetch_status": true,
+            "branch_icon": ""
           }
         },
         {
