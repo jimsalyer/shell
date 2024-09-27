@@ -179,7 +179,8 @@ load_pyenv() {
 }
 
 load_rbenv() {
-  eval "$(rbenv init - zsh)"
+  local shell="$(shell)"
+  eval "$(rbenv init - $shell)"
 }
 
 load_rvm() {
