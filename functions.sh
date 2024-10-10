@@ -219,7 +219,7 @@ npm_pack_zip() {
   local package_tarball="$package_name-$package_version.tgz"
 
   npm pack
-  tar -fvx "$package_tarball"
+  tar -xvf "$package_tarball"
   mv package "$package_name"
   zip -r "$package_name.zip" "$package_name"
   rm -fr "$package_name" "$package_tarball"
