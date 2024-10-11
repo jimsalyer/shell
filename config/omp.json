@@ -41,7 +41,7 @@
           "type": "git",
           "style": "plain",
           "foreground": "p:cyan",
-          "template": "({{ .HEAD }})",
+          "template": "({{ .HEAD }}) ",
           "properties": {
             "fetch_status": true,
             "branch_icon": ""
@@ -51,7 +51,7 @@
           "type": "python",
           "style": "plain",
           "foreground": "p:cyan",
-          "template": "{{ if .Venv }}({{ .Venv }}){{ end }}"
+          "template": "{{ if .Venv }}({{ .Venv }}){{ end }} "
         }
       ]
     },
