@@ -180,7 +180,7 @@ load_pyenv() {
 
 load_rbenv() {
   local shell="$(shell)"
-  eval "$(rbenv init - $shell)"
+  eval "$(rbenv init - --no-rehash $shell)"
 }
 
 load_rvm() {
