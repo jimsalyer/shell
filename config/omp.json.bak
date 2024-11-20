@@ -1,0 +1,75 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "version": 2,
+  "palette": {
+    "black": "#282a36",
+    "red": "#ff5555",
+    "green": "#50fa7b",
+    "yellow": "#f1fa8c",
+    "blue": "#6272a4",
+    "magenta": "#bd93f9",
+    "cyan": "#8be9fd",
+    "white": "#f8f8f2",
+    "foreground": "#f8f8f2",
+    "background": "#282a36"
+  },
+  "final_space": true,
+  "terminal_background": "p:background",
+  "console_title_template": "{{ .Folder }}{{ if .Root }} (root){{ end }}",
+  "disable_notice": true,
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "type": "root",
+          "style": "plain",
+          "foreground": "p:yellow"
+        },
+        {
+          "type": "path",
+          "style": "plain",
+          "foreground": "p:magenta",
+          "template": "{{ .Path }} ",
+          "properties": {
+            "style": "folder"
+          }
+        },
+        {
+          "type": "git",
+          "style": "plain",
+          "foreground": "p:cyan",
+          "template": "({{ .HEAD }}) ",
+          "properties": {
+            "fetch_status": true,
+            "branch_icon": ""
+          }
+        },
+        {
+          "type": "python",
+          "style": "plain",
+          "foreground": "p:cyan",
+          "template": "{{ if .Venv }}({{ .Venv }}){{ end }} "
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "type": "status",
+          "style": "plain",
+          "foreground": "p:foreground",
+          "template": "<b>{{ if gt .Code 0 }}<p:red>></>{{ else }}<p:green>></>{{ end }}</b>",
+          "properties": {
+            "always_enabled": true
+          }
+        }
+      ]
+    }
+  ]
+}
