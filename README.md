@@ -24,3 +24,5 @@ To use the included Git configuration, you'll need to edit your existing Git con
 [include]
   path = /path/to/shell/config/gitconfig
 ```
+
+There is also a configuration for Oh My Posh in /path/to/shell/config/omp.json that you can use for a text only (no glyphs) prmpt that supports the Dracula color scheme.
