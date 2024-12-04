@@ -276,7 +276,7 @@ repack7() {
 
 sam_build_invoke() {
   emulate_arm64
-  sam build --cached
+  sam build
   sam_invoke_shared "$@"
 }
 
