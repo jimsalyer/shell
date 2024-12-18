@@ -94,6 +94,11 @@ flatten() {
   find . -type d -empty -delete
 }
 
+git_clean_branches() {
+  git fetch -p
+  git branch -vv | grep 'gone]' | awk '{print $1}' | xargs git branch -D
+}
+
 load_brew() {
   local brew_path
   if [[ -d /opt/homebrew ]]; then
