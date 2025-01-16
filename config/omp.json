@@ -50,7 +50,7 @@
           "style": "plain"
         },
         {
-          "template": "{{ if .Venv }}({{ .Venv }}){{ end }} ",
+          "template": "{{ if .Venv }}(venv){{ end }} ",
           "foreground": "p:cyan",
           "type": "python",
           "style": "plain"
