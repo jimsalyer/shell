@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 aws_invoke() {
   local function_name="$1"
   local payload="${2:-{}}"
@@ -13,7 +15,7 @@ change_posh_theme() {
 
 change_sam_version() {
   local version="$1"
-  if [[ ! -n "$version" ]]; then
+  if [[ -z "$version" ]]; then
     echo "A version to set as current is required."
     return
   fi
@@ -24,7 +26,8 @@ change_sam_version() {
 
 # Dependencies: load_brew
 config_coreutils_brew() {
-  export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
+  PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
+  export PATH
 }
 
 config_devtoolset() {
@@ -48,12 +51,17 @@ config_netskope_mac() {
 }
 
 config_posh() {
-  [[ -z "$POSH_THEMES_PATH" ]] && export POSH_THEMES_PATH="$(brew --prefix oh-my-posh)/themes"
+  if [[ -z "$POSH_THEMES_PATH" ]]; then
+    POSH_THEMES_PATH="$(brew --prefix oh-my-posh)/themes"
+    export POSH_THEMES_PATH
+  fi
 }
 
 # Dependencies: load_brew
 config_sqlite_brew() {
-  local sqlite_dir="$(brew --prefix sqlite)"
+  local sqlite_dir
+  sqlite_dir="$(brew --prefix sqlite)"
+
   export PATH="$sqlite_dir/bin:$PATH"
   export LDFLAGS="-L$sqlite_dir/lib"
   export CPPFLAGS="-I$sqlite_dir/include"
@@ -89,8 +97,8 @@ fix_special_keys_windows() {
 }
 
 flatten() {
-  cd "$1"
-  find . -mindepth 2 -type f -exec mv {} .. \
+  cd "$1" || return
+  find . -mindepth 2 -type f -exec mv {} .. \;
   find . -type d -empty -delete
 }
 
@@ -115,7 +123,7 @@ load_brew() {
 
 load_dircolors() {
   local file="${1:-$HOME/.dircolors}"
-  eval "$(dircolors -b $file)"
+  eval "$(dircolors -b "$file")"
 }
 
 load_dnvm() {
@@ -142,13 +150,16 @@ load_nvm() {
 # Dependencies: load_brew
 load_nvm_brew() {
   export NVM_DIR="$HOME/.nvm"
-  local homebrew_nvm="$(brew --prefix nvm)"
+  local homebrew_nvm
+  homebrew_nvm="$(brew --prefix nvm)"
+
   [[ -s "$homebrew_nvm/nvm.sh" ]] && source "$homebrew_nvm/nvm.sh" # This loads nvm
   [[ -s "$homebrew_nvm/etc/bash_completion.d/nvm" ]] && source "$homebrew_nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
 }
 
 load_nvm_cloud9() {
   [ "$BASH_VERESION" ] && npm() {
+    # shellcheck disable=SC2317
     if [ "$*" == "config get prefix" ]
     then
       which node | sed "s/bin\/node//"
@@ -158,6 +169,7 @@ load_nvm_cloud9() {
   }
 
   load_nvm
+  # shellcheck disable=SC2034
   rvm_silence_path_mismatch_check_flag=1
   unset npm
 }
@@ -167,10 +179,10 @@ load_posh() {
   local shell="$1"
   local theme="$POSH_THEMES_PATH/$2.omp.json"
 
-  if [[ "$(lower $2)" == *.json ]]; then
+  if [[ "$(lower "$2")" == *.json ]]; then
     theme="$2"
   fi
-  eval "$(oh-my-posh init $shell -c $theme)"
+  eval "$(oh-my-posh init "$shell" -c "$theme")"
 }
 
 load_pyenv() {
@@ -179,13 +191,15 @@ load_pyenv() {
   eval "$(pyenv init -)"
 
   if [[ -z "$PYENV_VERSION" ]]; then
-    export PYENV_VERSION="$(pyenv global)"
+    PYENV_VERSION="$(pyenv global)"
+    export PYENV_VERSION
   fi
 }
 
 load_rbenv() {
-  local shell="$(shell)"
-  eval "$(rbenv init - --no-rehash $shell)"
+  local shell
+  shell="$(shell)"
+  eval "$(rbenv init - --no-rehash "$shell")"
 }
 
 load_rvm() {
@@ -200,7 +214,8 @@ load_sdkman() {
 
 # Dependencies: load_brew
 load_sdkman_brew() {
-  export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
+  SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
+  export SDKMAN_DIR
   [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
 }
 
@@ -215,12 +230,15 @@ lower() {
 }
 
 lower_case() {
-  echo "$(lower $1)"
+  # shellcheck disable=SC2005
+  echo "$(lower "$1")"
 }
 
 npm_pack_zip() {
-  local package_name=$(jq -r '.name' package.json)
-  local package_version=$(jq -r '.version' package.json)
+  local package_name
+  package_name=$(jq -r '.name' package.json)
+  local package_version
+  package_version=$(jq -r '.version' package.json)
   local package_tarball="$package_name-$package_version.tgz"
 
   npm pack
@@ -230,8 +248,14 @@ npm_pack_zip() {
   rm -fr "$package_name" "$package_tarball"
 }
 
+paths() {
+  echo "$PATH" | tr ':' '\n'
+}
+
 reload() {
-  local shell="$(shell)"
+  local shell
+  shell=$(shell)
+
   if [[ "$shell" == bash ]]; then
     exec bash
   elif [[ "$shell" == zsh ]]; then
@@ -240,11 +264,13 @@ reload() {
 }
 
 repack7() {
-  local orig_nocasematch=$(shopt -p nocasematch; true)
+  local orig_nocasematch
+  orig_nocasematch=$(shopt -p nocasematch; true)
   shopt -s nocasematch
 
   for file_path in "$@"; do
-    local file_name=$(basename -- "$file_path")
+    local file_name
+    file_name=$(basename -- "$file_path")
     local base_name="${file_name%%.*}"
     local ext="${file_name##*.}"
 
@@ -296,15 +322,15 @@ sam_invoke_shared() {
   local debug="$3"
   local command="sam local invoke $function_name"
 
-  if [[ ! -z "$event" ]]; then
-    if [[ "$event" == *{* ]]; then
+  if [[ -n "$event" ]]; then
+    if [[ "$event" == "*{*" ]]; then
       command="echo '$event' | $command -e '-'"
     else
       command="$command -e $event"
     fi
   fi
 
-  if [[ ! -z "$debug" ]]; then
+  if [[ -n "$debug" ]]; then
     command="$command --debug"
   fi
 
@@ -314,7 +340,7 @@ sam_invoke_shared() {
 
 sam_start() {
   local warm_containers="$1"
-  if [[ ! -z "$warm_containers" ]]; then
+  if [[ -n "$warm_containers" ]]; then
     warm_containers="${warm_containers^^}"
     sam local start-lambda --warm-containers "$warm_containers"
   else
@@ -323,7 +349,8 @@ sam_start() {
 }
 
 shell() {
-  echo "$(basename $SHELL)"
+  # shellcheck disable=SC2005
+  echo "$(basename "$SHELL")"
 }
 
 start_timer() {
@@ -334,7 +361,7 @@ start_timer() {
 stop_timer() {
   if [[ $timer ]]; then
     now=$(($(date +%s%0N) / 1000000))
-    elapsed=$(($now - $timer))
+    elapsed=$((now - timer))
 
     echo "Timer ran for ${elapsed}ms"
     unset timer
@@ -346,5 +373,6 @@ upper() {
 }
 
 upper_case() {
-  echo "$(upper $1)"
+  # shellcheck disable=SC2005
+  echo "$(upper "$1")"
 }
