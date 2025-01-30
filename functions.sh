@@ -205,12 +205,6 @@ load_sdkman_brew() {
   [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
 }
 
-load_zsh() {
-  if [ -t 1 ]; then
-    exec zsh
-  fi
-}
-
 lower() {
   echo "$1" | tr '[:upper:]' '[:lower:]'
 }
