@@ -50,13 +50,6 @@ config_netskope_mac() {
   export REQUESTS_CA_BUNDLE="$netskope_cert_bundle"
 }
 
-config_posh() {
-  if [[ -z "$POSH_THEMES_PATH" ]]; then
-    POSH_THEMES_PATH="$(brew --prefix oh-my-posh)/themes"
-    export POSH_THEMES_PATH
-  fi
-}
-
 # Dependencies: load_brew
 config_sqlite_brew() {
   local sqlite_dir
@@ -175,14 +168,7 @@ load_nvm_cloud9() {
 }
 
 load_posh() {
-  config_posh
-  local shell="$1"
-  local theme="$POSH_THEMES_PATH/$2.omp.json"
-
-  if [[ "$(lower "$2")" == *.json ]]; then
-    theme="$2"
-  fi
-  eval "$(oh-my-posh init "$shell" -c "$theme")"
+  eval "$(oh-my-posh init "$1" -c "$2")"
 }
 
 load_pyenv() {
