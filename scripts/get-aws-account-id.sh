@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+# =============================================================================
+# Name: get-aws-account-id.sh
+# Type: Function
+# Description: Get the current AWS account ID.
+# Dependencies: awscli
+# =============================================================================
+
 get_aws_account_id() {
   if [[ -z "$AWS_ACCOUNT_ID" ]]; then
     echo "AWS account ID not set. Retrieving..."

@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
 # =============================================================================
-# Name: exit-script.sh
+# Name: to-upper-case.sh
 # Type: Function
-# Description: Cross platform way to exit the current script
+# Description: Convert the provided string to upper case.
 # =============================================================================
 
-exit_script() {
-  kill -SIGINT $$
+# shellcheck disable=SC2005
+
+to_upper_case() {
+  echo "$1" | tr '[:lower:]' '[:upper:]'
 }

@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 
 # =============================================================================
-# Name: exit-script.sh
+# Name: get-fil-extension.sh
 # Type: Function
-# Description: Cross platform way to exit the current script
+# Description: Get the provided file's extension (without the dot).
 # =============================================================================
 
-exit_script() {
-  kill -SIGINT $$
+get_file_extension() {
+  local file_name
+
+  file_name="$(basename "$1")"
+  echo "${file_name##*.}"
 }

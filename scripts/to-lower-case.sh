@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
 # =============================================================================
-# Name: exit-script.sh
+# Name: to-lower-case.sh
 # Type: Function
-# Description: Cross platform way to exit the current script
+# Description: Convert the provided string to lower case.
 # =============================================================================
 
-exit_script() {
-  kill -SIGINT $$
+# shellcheck disable=SC2005
+
+to_lower_case() {
+  echo "$1" | tr '[:upper:]' '[:lower:]'
 }

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 # =============================================================================
-# Name: exit-script.sh
+# Name: list-paths.sh
 # Type: Function
-# Description: Cross platform way to exit the current script
+# Description: List all the entries in PATH.
 # =============================================================================
 
-exit_script() {
-  kill -SIGINT $$
+list_paths() {
+  echo "$PATH" | tr ':' '\n'
 }
