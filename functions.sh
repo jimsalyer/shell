@@ -1,13 +1,5 @@
 #!/usr/bin/env bash
 
-aws_invoke() {
-  local function_name="$1"
-  local payload="${2:-{}}"
-  local outfile="${3:-out.txt}"
-
-  aws lambda invoke --function-name "$function_name" --payload "$payload" --cli-binary-format raw-in-base64-out --endpoint-url http://127.0.0.1:3001 --no-verify-ssl "$outfile"
-}
-
 change_sam_version() {
   local version="$1"
   if [[ -z "$version" ]]; then
@@ -27,32 +19,6 @@ config_coreutils_brew() {
 
 config_devtoolset() {
   export PATH="/opt/rh/devtoolset-8/root/usr/bin:$PATH"
-}
-
-config_mac() {
-  export APP_SUPPORT="/Library/Application Support"
-  export HOME_APP_SUPPORT="$HOME/Library/Application Support"
-}
-
-# Dependencies: config_mac
-config_netskope_mac() {
-  local netskope_cert_bundle="$APP_SUPPORT/Netskope/STAgent/data/netskope-cert-bundle.pem"
-  export AWS_CA_BUNDLE="$netskope_cert_bundle"
-  export CURL_CA_BUNDLE="$netskope_cert_bundle"
-  export NODE_EXTRA_CA_CERTS="$netskope_cert_bundle"
-  export SSL_CERT_FILE="$netskope_cert_bundle"
-  export GIT_SSL_CAPATH="$netskope_cert_bundle"
-  export REQUESTS_CA_BUNDLE="$netskope_cert_bundle"
-}
-
-# Dependencies: load_brew
-config_sqlite_brew() {
-  local sqlite_dir
-  sqlite_dir="$(brew --prefix sqlite)"
-
-  export PATH="$sqlite_dir/bin:$PATH"
-  export LDFLAGS="-L$sqlite_dir/lib"
-  export CPPFLAGS="-I$sqlite_dir/include"
 }
 
 config_volta() {
@@ -114,37 +80,6 @@ load_dircolors() {
   eval "$(dircolors -b "$file")"
 }
 
-load_dnvm() {
-  if [ -f "$HOME/.local/share/dnvm/env" ]; then
-    . "$HOME/.local/share/dnvm/env"
-  fi
-}
-
-# Dependencies: config_mac
-load_dnvm_mac() {
-  [[ -f "$HOME_APP_SUPPORT/dnvm/env" ]] && source "$HOME_APP_SUPPORT/dnvm/env"
-}
-
-load_fnm() {
-  eval "$(fnm env)"
-}
-
-load_nvm() {
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-  [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
-}
-
-# Dependencies: load_brew
-load_nvm_brew() {
-  export NVM_DIR="$HOME/.nvm"
-  local homebrew_nvm
-  homebrew_nvm="$(brew --prefix nvm)"
-
-  [[ -s "$homebrew_nvm/nvm.sh" ]] && source "$homebrew_nvm/nvm.sh" # This loads nvm
-  [[ -s "$homebrew_nvm/etc/bash_completion.d/nvm" ]] && source "$homebrew_nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
-}
-
 load_nvm_cloud9() {
   [ "$BASH_VERESION" ] && npm() {
     # shellcheck disable=SC2317
@@ -166,23 +101,6 @@ load_posh() {
   eval "$(oh-my-posh init "$1" -c "$2")"
 }
 
-load_pyenv() {
-  export PYENV_ROOT="$HOME/.pyenv"
-  [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init -)"
-
-  if [[ -z "$PYENV_VERSION" ]]; then
-    PYENV_VERSION="$(pyenv global)"
-    export PYENV_VERSION
-  fi
-}
-
-load_rbenv() {
-  local shell
-  shell="$(shell)"
-  eval "$(rbenv init - --no-rehash "$shell")"
-}
-
 load_rvm() {
   [[ -s "$HOME/.rvm/environments/default" ]] && source "$HOME/.rvm/environments/default"
   export PATH="$PATH:$HOME/.rvm/bin"
@@ -191,13 +109,6 @@ load_rvm() {
 load_sdkman() {
   export SDKMAN_DIR="$HOME/.sdkman"
   [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-}
-
-# Dependencies: load_brew
-load_sdkman_brew() {
-  SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
-  export SDKMAN_DIR
-  [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
 }
 
 lower() {
@@ -278,49 +189,6 @@ repack7() {
   done
 
   $orig_nocasematch
-}
-
-sam_build_invoke() {
-  emulate_arm64
-  sam build
-  sam_invoke_shared "$@"
-}
-
-sam_invoke() {
-  emulate_arm64
-  sam_invoke_shared "$@"
-}
-
-sam_invoke_shared() {
-  local function_name="$1"
-  local event="$2"
-  local debug="$3"
-  local command="sam local invoke $function_name"
-
-  if [[ -n "$event" ]]; then
-    if [[ "$event" == "*{*" ]]; then
-      command="echo '$event' | $command -e '-'"
-    else
-      command="$command -e $event"
-    fi
-  fi
-
-  if [[ -n "$debug" ]]; then
-    command="$command --debug"
-  fi
-
-  command="$command 2>&1 | tr '\r' '\n'"
-  eval "$command"
-}
-
-sam_start() {
-  local warm_containers="$1"
-  if [[ -n "$warm_containers" ]]; then
-    warm_containers="${warm_containers^^}"
-    sam local start-lambda --warm-containers "$warm_containers"
-  else
-    sam local start-lambda
-  fi
 }
 
 shell() {
