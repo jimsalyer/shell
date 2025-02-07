@@ -11,21 +11,6 @@ change_sam_version() {
   sudo ln -s "/usr/local/aws-sam-cli/$version" /usr/local/aws-sam-cli/current
 }
 
-# Dependencies: load_brew
-config_coreutils_brew() {
-  PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
-  export PATH
-}
-
-config_devtoolset() {
-  export PATH="/opt/rh/devtoolset-8/root/usr/bin:$PATH"
-}
-
-config_volta() {
-  export VOLTA_HOME="$HOME/.volta"
-  export PATH="$VOLTA_HOME/bin:$PATH"
-}
-
 docker_clean() {
   docker system prune --all --force --volumes
 }
@@ -80,35 +65,8 @@ load_dircolors() {
   eval "$(dircolors -b "$file")"
 }
 
-load_nvm_cloud9() {
-  [ "$BASH_VERESION" ] && npm() {
-    # shellcheck disable=SC2317
-    if [ "$*" == "config get prefix" ]
-    then
-      which node | sed "s/bin\/node//"
-    else
-      $(which npm) "$@"
-    fi
-  }
-
-  load_nvm
-  # shellcheck disable=SC2034
-  rvm_silence_path_mismatch_check_flag=1
-  unset npm
-}
-
 load_posh() {
   eval "$(oh-my-posh init "$1" -c "$2")"
-}
-
-load_rvm() {
-  [[ -s "$HOME/.rvm/environments/default" ]] && source "$HOME/.rvm/environments/default"
-  export PATH="$PATH:$HOME/.rvm/bin"
-}
-
-load_sdkman() {
-  export SDKMAN_DIR="$HOME/.sdkman"
-  [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 }
 
 lower() {
