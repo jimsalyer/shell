@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
 # =============================================================================
-# Name: to-lower-case.sh
+# Name: to-lowercase.sh
 # Type: Function
-# Description: Convert the provided string to lower case.
+# Description: Convert the provided string to lowercase.
 # =============================================================================
 
 # shellcheck disable=SC2005
 
-to_lower_case() {
+to_lowercase() {
   echo "$1" | tr '[:upper:]' '[:lower:]'
+}
+
+to_lower() {
+  echo "$(to_lowercase "$1")"
 }

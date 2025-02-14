@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
 # =============================================================================
-# Name: to-upper-case.sh
+# Name: to-uppercase.sh
 # Type: Function
-# Description: Convert the provided string to upper case.
+# Description: Convert the provided string to uppercase.
 # =============================================================================
 
 # shellcheck disable=SC2005
 
-to_upper_case() {
+to_uppercase() {
   echo "$1" | tr '[:lower:]' '[:upper:]'
+}
+
+to_upper() {
+  echo "$(to_uppercase "$1")"
 }

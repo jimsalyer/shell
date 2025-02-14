@@ -10,19 +10,14 @@
 # shellcheck disable=SC2005
 
 get_file_path() {
-  local include_trailing_slash=false
-  local path
+  local file_path
 
-  if [[ -n "$2" ]]; then
-    include_trailing_slash=true
-  fi
-
-  path="$(dirname "$1")"
-  if [[ "$path" == . ]]; then
+  file_path="$(dirname "$1")"
+  if [[ "$file_path" == . ]]; then
     echo ""
-  elif [[ "$include_trailing_slash" ]]; then
-    echo "$path/"
+  elif [[ -n "$2" ]]; then
+    echo "$file_path/"
   else
-    echo "$path"
+    echo "$file_path"
   fi
 }

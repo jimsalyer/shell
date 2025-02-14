@@ -9,10 +9,9 @@
 # shellcheck disable=SC2005
 
 get_script_path() {
-  script_path="${0:a:h}"
-  if [[ -z "$script_path" ]]; then
-    script_path="$(realpath "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}")"
-    script_path="$(dirname "$script_path")"
-  fi
-  echo "$script_path"
+  echo "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+}
+
+script_path() {
+  echo "$(get_script_path)"
 }

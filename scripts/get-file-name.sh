@@ -11,14 +11,9 @@
 
 get_file_name() {
   local file_name
-  local include_extension=false
-
-  if [[ -n "$2" ]]; then
-    include_extension=true
-  fi
 
   file_name="$(basename "$1")"
-  if [[ "$include_extension" ]]; then
+  if [[ -n "$2" ]]; then
     echo "$file_name"
   else
     echo "${file_name%.*}"

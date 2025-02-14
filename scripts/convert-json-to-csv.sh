@@ -9,11 +9,13 @@
 
 # shellcheck disable=SC1090,SC1091
 
-source ./exit-script.sh
-source ./get-file-extension.sh
-source ./get-file-name.sh
-source ./get-file-path.sh
-source ./to-lower-case.sh
+SCRIPT_PATH="$(dirname "$0")"
+
+source "$SCRIPT_PATH/exit-script.sh"
+source "$SCRIPT_PATH/get-file-extension.sh"
+source "$SCRIPT_PATH/get-file-name.sh"
+source "$SCRIPT_PATH/get-file-path.sh"
+source "$SCRIPT_PATH/to-lowercase.sh"
 
 json_file="$1"
 if [[ -z "$json_file" ]]; then
@@ -27,7 +29,7 @@ json_extension="$(get_file_extension "$json_file")"
 json_file="$json_name.$json_extension"
 json_full_path="$json_path$json_file"
 
-if [[ "$(to_lower_case "$json_extension")" != json ]]; then
+if [[ "$(to_lower "$json_extension")" != json ]]; then
   echo "Input file must be JSON."
   exit_script
 elif [[ ! -f "$json_full_path" ]]; then
@@ -47,7 +49,7 @@ csv_extension="$(get_file_extension "$csv_file")"
 csv_file="$csv_name.$csv_extension"
 csv_full_path="$csv_path$csv_file"
 
-if [[ "$(to_lower_case "$csv_extension")" != csv ]]; then
+if [[ "$(to_lower "$csv_extension")" != csv ]]; then
   echo "Output file must be CSV."
   exit_script
 fi

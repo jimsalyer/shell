@@ -20,3 +20,7 @@ load_homebrew() {
   fi
   [[ "$brew_path" ]] && eval "$($brew_path shellenv)"
 }
+
+load_brew() {
+  load_homebrew
+}
