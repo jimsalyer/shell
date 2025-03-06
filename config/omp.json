@@ -3,17 +3,24 @@
   "version": 3,
   "final_space": true,
   "palette": {
-    "background": "#282a36",
-    "black": "#282a36",
-    "blue": "#6272a4",
-    "cyan": "#8be9fd",
-    "foreground": "#f8f8f2",
-    "green": "#50fa7b",
-    "lightRed": "#ff79c6",
-    "magenta": "#bd93f9",
-    "red": "#ff5555",
-    "white": "#f8f8f2",
-    "yellow": "#f1fa8c"
+    "background": "#282A36",
+    "foreground": "#F8F8F2",
+    "black": "#21222C",
+    "lightBlack": "#6272A4",
+    "blue": "#BD93F9",
+    "lightBlue": "#D6ACFF",
+    "cyan": "#8BE9FD",
+    "lightCyan": "#A4FFFF",
+    "green": "#50FA7B",
+    "lightGreen": "#69FF94",
+    "magenta": "#FF79C6",
+    "lightMagenta": "#FF92DF",
+    "red": "#FF5555",
+    "lightRed": "#FF6E6E",
+    "white": "#F8F8F2",
+    "lightWhite": "#FFFFFF",
+    "yellow": "#F1FA8C",
+    "lightYellow": "#FFFFA5"
   },
   "console_title_template": "{{ .Folder }}{{ if .Root }} (root){{ end }}",
   "terminal_background": "p:background",
@@ -28,7 +35,7 @@
             "style": "folder"
           },
           "template": "{{ .Path }} ",
-          "foreground": "p:magenta",
+          "foreground": "p:blue",
           "type": "path",
           "style": "plain"
         },
@@ -68,7 +75,7 @@
           "properties": {
             "always_enabled": true
           },
-          "template": "<b>{{ if gt .Code 0 }}<p:red>-></>{{ else }}<p:green>-></>{{ end }}</b>",
+          "template": "<b>{{ if gt .Code 0 }}<p:red>>></>{{ else }}<p:green>>></>{{ end }}</b>",
           "foreground": "p:foreground",
           "type": "status",
           "style": "plain"
