@@ -75,7 +75,7 @@
           "properties": {
             "always_enabled": true
           },
-          "template": "{{ if gt .Code 0 }}<p:red>\u00BB</>{{ else }}<p:green>\u00BB</>{{ end }}",
+          "template": "{{ if gt .Code 0 }}<p:red>></>{{ else }}<p:green>></>{{ end }}",
           "foreground": "p:foreground",
           "type": "status",
           "style": "plain"
