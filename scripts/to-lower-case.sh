@@ -8,10 +8,18 @@
 
 # shellcheck disable=SC2005
 
-to_lowercase() {
+lower() {
   echo "$1" | tr '[:upper:]' '[:lower:]'
 }
 
+lower_case() {
+  echo "$(lower "$1")"
+}
+
 to_lower() {
-  echo "$(to_lowercase "$1")"
+  echo "$(lower "$1")"
+}
+
+to_lower_case() {
+  echo "$(lower "$1")"
 }
