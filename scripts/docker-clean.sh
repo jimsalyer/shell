@@ -8,5 +8,9 @@
 # =============================================================================
 
 docker_clean() {
-  docker system prune --all --force --volumes
+  docker system prune -f --volumes
+}
+
+docker_clean_all() {
+  docker system prune -af --volumes
 }
