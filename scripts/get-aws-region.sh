@@ -25,7 +25,7 @@ get_aws_region() {
   echo "AWS region not set. Getting from current configuration..." >&2
   AWS_CONFIG_REGION="$(aws configure get region)"
 
-  if [[ -n "$aws_config_region" ]]; then
+  if [[ -n "$AWS_CONFIG_REGION" ]]; then
     export AWS_CONFIG_REGION
     echo "$AWS_CONFIG_REGION"
     return 0
