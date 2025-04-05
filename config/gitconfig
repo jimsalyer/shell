@@ -14,8 +14,6 @@
 [core]
   editor = vim
   autocrlf = false
-[http]
-  sslVerify = false
 [init]
   defaultBranch = main
 [user]
