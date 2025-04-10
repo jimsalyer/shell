@@ -2,7 +2,6 @@
 
 # =============================================================================
 # Name: load-homebrew.sh
-# Type: Function
 # Description: Initialize the Homebrew shell environment no matter which
 #              platform it's installed on.
 # =============================================================================
@@ -21,6 +20,5 @@ load_homebrew() {
   [[ "$brew_path" ]] && eval "$($brew_path shellenv)"
 }
 
-load_brew() {
-  load_homebrew
-}
+load_homebrew
+unset -f load_homebrew

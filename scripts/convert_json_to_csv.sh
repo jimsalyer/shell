@@ -1,13 +1,7 @@
 #!/usr/bin/env bash
-
-# =============================================================================
-# Name: convert-json-to-csv.sh
-# Type: Script
-# Description: Convert JSON files to CSV files for easy importing and editing.
-# Dependencies: jq
-# =============================================================================
-
 # shellcheck disable=SC1090,SC1091
+
+# Convert JSON files to CSV files for easy importing and editing.
 
 SCRIPT_PATH="$(dirname "$0")"
 

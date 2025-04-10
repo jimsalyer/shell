@@ -1,15 +1,12 @@
 #!/usr/bin/env bash
 
-# =============================================================================
-# Name: repack7.sh
-# Type: Function
-# Description: Repack a 7z file as a zip file.
-# Dependencies: 7z, zip
-# =============================================================================
-
+# Repack a 7z file as a zip file.
 repack7() {
   local orig_nocasematch
-  orig_nocasematch=$(shopt -p nocasematch; true)
+  orig_nocasematch=$(
+    shopt -p nocasematch
+    true
+  )
   shopt -s nocasematch
 
   for file_path in "$@"; do
@@ -48,3 +45,6 @@ repack7() {
 
   $orig_nocasematch
 }
+
+repack7 "$@"
+unset -f repack7

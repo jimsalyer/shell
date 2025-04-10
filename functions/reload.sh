@@ -1,17 +1,8 @@
 #!/usr/bin/env bash
 
-# =============================================================================
-# Name: reload.sh
-# Type: Function
-# Description: Cross platform way to reload the current shell environment
-# =============================================================================
-
+# Cross platform way to reload the current shell environment
 reload() {
-  local shell
-  shell="$(basename "$SHELL")"
-  exec "$shell"
-}
-
-rl() {
-  reload
+  [[ -z "$SHELL" ]] && SHELL="$(ps -p $$ -o comm=)"
+  TERM="${TERM:-xterm-256color}"
+  env -i HOME="$HOME" SHELL="$SHELL" TERM="$TERM" "$SHELL" -l
 }

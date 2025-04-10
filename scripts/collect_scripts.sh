@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 
-#===============================================================================
-# Name: collect-scripts.sh
-# Type: Function
-# Description: Collect scripts into a single file.
-#===============================================================================
+# Collect scripts into a single file.
 
 collect_scripts() {
   local output_file="scripts.sh"
@@ -16,15 +12,15 @@ collect_scripts() {
 
   while true; do
     case "$1" in
-      -c|--checks|--shellchecks|--shell-checks)
+      -c | --checks | --shellchecks | --shell-checks)
         shift
         shell_checks="$1"
         ;;
-      -o|--output|--output-file)
+      -o | --output | --output-file)
         shift
         output_file="$1"
         ;;
-      -s|--shell|--shell-type)
+      -s | --shell | --shell-type)
         shift
         shell_type="$(echo "$1" | tr '[:upper:]' '[:lower:]')"
         ;;
@@ -76,3 +72,6 @@ collect_scripts() {
     echo >> "$output_file"
   done
 }
+
+collect_scripts "$@"
+unset -f collect_scripts

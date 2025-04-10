@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-# =============================================================================
-# Name: get-aws-region.sh
-# Type: Function
-# Description: Get the current AWS region.
-# Dependencies: awscli
-# =============================================================================
-
 get_aws_region() {
   if [[ -n "$AWS_REGION" ]]; then
     echo "$AWS_REGION"

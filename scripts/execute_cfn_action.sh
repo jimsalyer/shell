@@ -10,19 +10,19 @@ execute_cfn_action() {
 
   while true; do
     case "$1" in
-      -a|--action)
+      -a | --action)
         action="$2"
         shift 2
         ;;
-      -p|--params|--parameter-overrides|--parameters)
+      -p | --params | --parameter-overrides | --parameters)
         params="$2"
         shift 2
         ;;
-      -s|--stack|--stack-name)
+      -s | --stack | --stack-name)
         stack="$2"
         shift 2
         ;;
-      -t|--template|--template-file)
+      -t | --template | --template-file)
         template="$2"
         shift 2
         ;;
@@ -83,3 +83,4 @@ execute_cfn_action() {
 }
 
 execute_cfn_action "$@"
+unset -f execute_cfn_action

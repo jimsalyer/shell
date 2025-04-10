@@ -15,6 +15,26 @@ aws_login() {
   fi
 }
 
+change_sam_version() {
+  local version="$1"
+  if [[ -z "$version" ]]; then
+    echo "A version to set as current is required."
+    return
+  fi
+
+  sudo unlink /usr/local/aws-sam-cli/current
+  sudo ln -s "/usr/local/aws-sam-cli/$version" /usr/local/aws-sam-cli/current
+}
+
+list_sam_versions() {
+  for path in /usr/local/aws-sam-cli/*/; do
+    dir="$(basename "$path")"
+    if [[ "$dir" != current ]]; then
+      echo "$dir"
+    fi
+  done
+}
+
 load_password() {
   if [[ ! -d "$HOME/.cache" ]]; then
     mkdir "$HOME/.cache"

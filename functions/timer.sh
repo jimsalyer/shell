@@ -1,12 +1,7 @@
 #!/usr/bin/env bash
-
-# =============================================================================
-# Name: timer.sh
-# Type: Function (2)
-# Description: Timer functions to get elapsed time on a given piece of logic
-# =============================================================================
-
 # shellcheck disable=SC2005
+
+# Timer functions to get elapsed time on a given piece of logic
 
 _date() {
   if [[ "$OSTYPE" == darwin* ]]; then

@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 
-# =============================================================================
-# Name: run-prettier.sh
-# Type: Function
-# Description: Run Prettier on the file provided.
-# Dependencies: node
-# =============================================================================
-
+# Run Prettier on the file provided.
 run_prettier() {
   local file="$1"
   if [[ -f "$file" ]]; then
@@ -33,3 +27,6 @@ run_prettier() {
     echo "The file \"$file\" does not exist."
   fi
 }
+
+run_prettier "$@"
+unset -f run_prettier

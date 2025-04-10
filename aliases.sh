@@ -11,5 +11,6 @@ alias l="ls -CF"
 alias la="ls -A"
 alias ll="ls -alF"
 alias print_env="env | sort"
+alias rl=reload
 alias rs=reset
 alias wget="wget -c"

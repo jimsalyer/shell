@@ -1,14 +1,7 @@
 #!/usr/bin/env bash
-
-# =============================================================================
-# Name: npm-pack-zip.sh
-# Type: Function
-# Description: Create a zip file with the necessary files from a Node repo.
-# Dependencies: jq, tar, zip
-# =============================================================================
-
 # shellcheck disable=SC2005
 
+# Create a zip file with the necessary files from a Node repo
 npm_pack_zip() {
   local package_name
   package_name=$(jq -r '.name' package.json)
@@ -22,3 +15,6 @@ npm_pack_zip() {
   zip -r "$package_name.zip" "$package_name"
   rm -fr "$package_name" "$package_tarball"
 }
+
+npm_pack_zip
+unset -f npm_pack_zip
