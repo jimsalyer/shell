@@ -7,7 +7,7 @@
   last = log -1 HEAD
   ll = log --oneline
   p = push
-  pd = !git pull -p && git fetch --prune && (git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D)
+  pb = !git pull -p && git fetch --prune && (git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D)
   rv = remote -v
   se = !git rev-list --all | xargs git grep -F
   st = status -bs
