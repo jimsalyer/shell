@@ -1,0 +1,17 @@
+# Normalize all text files to LF in the repository
+* text=auto eol=lf
+
+# Treat these as binary (no EOL conversion)
+*.dll binary
+*.doc binary
+*.docx binary
+*.exe binary
+*.gif binary
+*.jpg binary
+*.png binary
+*.pdf binary
+*.ppt binary
+*.pptx binary
+*.xls binary
+*.xlsx binary
+*.zip binary
