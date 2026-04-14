@@ -25,4 +25,14 @@ To use the included Git configuration, you'll need to edit your existing Git con
   path = /path/to/shell/config/gitconfig
 ```
 
-There is also a configuration for Oh My Posh in /path/to/shell/config/omp.json that you can use for a text only (no glyphs) prmpt that supports the Dracula color scheme.
+There is also a configuration for Oh My Posh in /path/to/shell/config/omp.json that you can use for a text only (no glyphs) prmpt that supports the Dracula color scheme. You can use that with the following command in your RC file.
+
+```bash
+eval "$(oh-my-posh init <shell_type> -c "/path/to/shell/config/omp.json")"
+```
+
+If you want Oh My Posh to automatically get the shell type, use the following:
+
+```bash
+eval "$(oh-my-posh init $(oh-my-posh shell get) -c "/path/to/shell/config/omp.json")"
+```
