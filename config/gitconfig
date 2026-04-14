@@ -6,6 +6,7 @@
   gl = config -l --global
   last = log -1 HEAD
   ll = log --oneline
+  nuke = git fetch origin && git reset --hard origin/$(git branch --show-current)
   p = push
   pb = !git pull -p && git fetch --prune && (git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D)
   rv = remote -v
